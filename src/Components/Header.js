@@ -49,6 +49,9 @@ function Header({ type }) {
   const Hotel = () => {
     navigate("/Hotel");
   };
+  const logOut = () => {
+    navigate("/");
+  };
   return (
     <div>
       {location.pathname !== "/" && (
@@ -72,6 +75,11 @@ function Header({ type }) {
               <div className="headerListItem active">
                 <Button variant="succses" onClick={Rezervasyon}>
                   Rezervasyon
+                </Button>
+              </div>
+              <div className="headerListItem active">
+                <Button variant="succses" onClick={logOut}>
+                  Log out
                 </Button>
               </div>
             </div>
@@ -120,7 +128,7 @@ function Header({ type }) {
                     {openOptions && (
                       <div className="options">
                         <div className="optionItem">
-                          <span className="optionText">Adult</span>
+                          <span className="optionText">Yetişkin</span>
                           <div className="optionCounter">
                             <button
                               disabled={options.adult <= 1}
@@ -141,7 +149,7 @@ function Header({ type }) {
                           </div>
                         </div>
                         <div className="optionItem">
-                          <span className="optionText">Children</span>
+                          <span className="optionText">Çocuk</span>
                           <div className="optionCounter">
                             <button
                               disabled={options.children <= 0}
@@ -162,7 +170,7 @@ function Header({ type }) {
                           </div>
                         </div>
                         <div className="optionItem">
-                          <span className="optionText">Room</span>
+                          <span className="optionText">Oda</span>
                           <div className="optionCounter">
                             <button
                               disabled={options.room <= 1}
@@ -187,7 +195,7 @@ function Header({ type }) {
                   </div>
                   <div className="headerSearchItem">
                     <Button variant="contained" onClick={handleSearch}>
-                      Search
+                      ARA
                     </Button>
                   </div>
                 </div>

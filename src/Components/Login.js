@@ -1,31 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { TextField } from "@mui/material";
+import { Input, TextField } from "@mui/material";
 import "../../src/App.css";
 import { Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import axios from "axios";
 function Login({ user, setUser }) {
+  const location = useLocation();
+  const [err, setErr] = useState("");
   const { handleSubmit, control } = useForm();
   const navigate = useNavigate();
   const onSubmit = (data) => {
-    user = [
-      ...user,
-      {
-        username: data.username,
+    axios
+      .post("http://localhost:8081/login", {
+        email: data.email,
         password: data.password,
-      },
-    ];
-    const timer = setTimeout(() => navigate("/Home"), 1500);
-    console.log(user);
+      })
+
+      .then((response) => {
+        if (response.data == "Success") {
+          setUser(response.config.data);
+          console.log(user);
+          navigate("/Home");
+        } else {
+          setErr("Gmail  veya Şifre yanlış olabilir");
+        }
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  // user = [
+  //   ...user,
+  //   {
+  //     username: data.username,
+  //     password: data.password,
+  //   },
+  // ];
+
+  // };
   return (
     <div>
-      <div className="login">
-        <Grid
+      {/* <Grid
           container
           width="250px"
           height="100px"
@@ -38,50 +60,70 @@ function Login({ user, setUser }) {
           direction="column-reverse"
           justifyContent="space-around"
           alignItems="center"
-        >
-          <form onSubmit={handleSubmit((data) => onSubmit(data))}>
-            <Grid>
-              <Controller
-                control={control}
-                name="username"
-                render={({ field: { onChange, onBlur, value, ref } }) => (
-                  <TextField
-                    type=""
-                    label="Username"
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    selected={value}
-                    required
-                  />
-                )}
-              />
-              <Grid>
-                <Controller
-                  control={control}
-                  name="password"
-                  render={({ field: { onChange, onBlur, value, ref } }) => (
-                    <TextField
-                      type="password"
-                      label="password"
-                      onChange={onChange}
-                      onBlur={onBlur}
-                      selected={value}
-                      required
+        > */}
+      {location.pathname !== "/Header" && (
+        <div className="giriş">
+          <div className="login">
+            <div className="login-box">
+              <h2>Login</h2>
+              <p className="error">{err}</p>
+
+              <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+                <div className="user-box">
+                  <Grid>
+                    <Controller
+                      control={control}
+                      name="email"
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <input
+                          type=""
+                          label="Username"
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          selected={value}
+                          required
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Grid>
-            </Grid>
-            <Button id="lgn" type="submit" color="info">
-              Login
-            </Button>
-            {/* <Button id="rgs" type="submit" color="info">
+                  </Grid>
+                </div>
+                <div className="user-box">
+                  <Grid>
+                    <Controller
+                      control={control}
+                      name="password"
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <input
+                          type="password"
+                          label="password"
+                          onChange={onChange}
+                          onBlur={onBlur}
+                          selected={value}
+                          required
+                        />
+                      )}
+                    />
+                  </Grid>
+                </div>
+                <Button id="lgn" type="submit" color="info">
+                  Login
+                </Button>
+                {/* <Button id="rgs" type="submit" color="info">
               Register
             </Button> */}
-            <a href="/Register">create acount</a>
-          </form>
-        </Grid>
-      </div>
+                <a href="/Signup">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  Hesap oluştur
+                </a>
+              </form>
+              {/* </Grid> */}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
